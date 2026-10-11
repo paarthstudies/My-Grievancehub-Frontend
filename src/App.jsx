@@ -8,7 +8,8 @@ import { AuthModal } from './components/AuthModal';
 import { ComplaintModal } from './components/ComplaintModal';
 import { TrackTicketModal } from './components/TrackTicketModal';
 import { AdminDashboard } from './components/AdminDashboard';
-import { CheckCircle2, Sparkles, ArrowRight, LayoutDashboard } from 'lucide-react';
+import { AiChatWidget } from './components/AiChatWidget';
+import { CheckCircle2, Sparkles, LayoutDashboard } from 'lucide-react';
 
 export default function App() {
   // Navigation / View state: 'landing' | 'admin' | 'auth-dedicated'
@@ -93,7 +94,7 @@ export default function App() {
     showToast(`Grievance ${newTicket.id} registered! Auto-dispatched to ${newTicket.substation}.`);
   };
 
-  // If in Admin Dashboard view, render the ServiceVolt-inspired dashboard
+  // If in Admin Dashboard view, render the multi-workspace ServiceVolt dashboard
   if (activeView === 'admin') {
     return (
       <div className="min-h-screen bg-[#F4F4F5] text-neutral-900 font-sans antialiased selection:bg-[#D2F843] selection:text-black">
@@ -127,7 +128,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Primary Navigation Bar (Refactored Transparent Header) */}
+      {/* Primary Navigation Bar (Transparent Header) */}
       <Navbar
         onOpenAuth={(role) => handleOpenAuth(role, false)}
         onOpenTrack={() => handleOpenTrackTicket()}
@@ -173,13 +174,12 @@ export default function App() {
             />
           </div>
         ) : (
-          /* Page 1: Cinematic Landing Page */
+          /* Page 1: Minimalist Cinematic Landing Page (image_18.png) */
           <>
-            {/* Hero Section with Cinematic Transmission Towers Background & Right Floating Stack */}
+            {/* Hero Section with Unobstructed Transmission Towers Vista & Left-only Gradient */}
             <HeroSection
               onOpenRegister={() => handleOpenFileComplaint()}
               onOpenTrack={() => handleOpenTrackTicket()}
-              onFileWithComplaint={(prompt) => handleOpenFileComplaint(prompt)}
             />
 
             {/* Comprehensive Grievance Categories & SLAs */}
@@ -205,7 +205,7 @@ export default function App() {
                 </h3>
                 
                 <p className="text-xs sm:text-sm text-neutral-600 max-w-xl mx-auto">
-                  Experience both the citizen-facing grievance portal with AI triage and the ServiceVolt-inspired MSCEB DISCOM Operations Dashboard.
+                  Experience both the citizen-facing grievance portal and the ServiceVolt-inspired MSCEB DISCOM Operations Dashboard.
                 </p>
 
                 <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
@@ -236,6 +236,14 @@ export default function App() {
         onOpenRegister={() => handleOpenFileComplaint()}
         onOpenTrack={() => handleOpenTrackTicket()}
       />
+
+      {/* Floating Minimalist AI Assistant FAB & Micro-Popup (image_18.png) */}
+      {activeView === 'landing' && (
+        <AiChatWidget
+          onFileComplaint={(prompt) => handleOpenFileComplaint(prompt)}
+          onTrackTicket={() => handleOpenTrackTicket()}
+        />
+      )}
 
       {/* Modals */}
       <AuthModal
