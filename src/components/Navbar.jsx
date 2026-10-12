@@ -165,7 +165,20 @@ export function Navbar({ onOpenAuth, onOpenTrack, onOpenRegister, activeView, se
               <span>Helpline: <strong className="text-neutral-900 font-mono">1912 / 1800-212-3435</strong></span>
             </a>
 
-            {/* Direct Admin Console toggle shortcut for evaluation */}
+            {/* Direct Officer & Admin Console shortcuts for evaluation */}
+            <button
+              onClick={() => setActiveView(activeView === 'officer' ? 'landing' : 'officer')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+                activeView === 'officer' 
+                  ? 'bg-neutral-900 text-white border-neutral-900' 
+                  : 'bg-white/50 hover:bg-white border-neutral-300 text-neutral-700'
+              }`}
+              title="Toggle MSCEB Field Officer Panel"
+            >
+              <Zap className="w-3.5 h-3.5 text-[#10B981]" />
+              <span>{activeView === 'officer' ? 'Exit Officer' : 'Officer Portal'}</span>
+            </button>
+
             <button
               onClick={() => setActiveView(activeView === 'admin' ? 'landing' : 'admin')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
@@ -254,6 +267,13 @@ export function Navbar({ onOpenAuth, onOpenTrack, onOpenRegister, activeView, se
             >
               <User className="w-4 h-4" />
               <span>Sign In</span>
+            </button>
+            <button
+              onClick={() => { setMobileMenuOpen(false); setActiveView('officer'); }}
+              className="w-full py-2.5 rounded-full border border-neutral-300 text-neutral-800 text-sm font-semibold flex items-center justify-center gap-2 hover:bg-neutral-50"
+            >
+              <Zap className="w-4 h-4 text-[#10B981]" />
+              <span>Open Field Officer Panel</span>
             </button>
             <button
               onClick={() => { setMobileMenuOpen(false); setActiveView('admin'); }}

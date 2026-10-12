@@ -8,11 +8,12 @@ import { AuthModal } from './components/AuthModal';
 import { ComplaintModal } from './components/ComplaintModal';
 import { TrackTicketModal } from './components/TrackTicketModal';
 import { AdminDashboard } from './components/AdminDashboard';
+import { OfficerPanel } from './components/OfficerPanel';
 import { AiChatWidget } from './components/AiChatWidget';
-import { CheckCircle2, Sparkles, LayoutDashboard } from 'lucide-react';
+import { CheckCircle2, Sparkles, LayoutDashboard, ShieldAlert } from 'lucide-react';
 
 export default function App() {
-  // Navigation / View state: 'landing' | 'admin' | 'auth-dedicated'
+  // Navigation / View state: 'landing' | 'admin' | 'officer' | 'auth-dedicated'
   const [activeView, setActiveView] = useState('landing');
 
   // Modals state
@@ -30,13 +31,15 @@ export default function App() {
   const [authUser, setAuthUser] = useState(null);
   const [bannerToast, setBannerToast] = useState(null);
 
-  // Sync with URL hash if user navigates to #signin or #admin
+  // Sync with URL hash if user navigates to #signin, #admin, or #officer
   useEffect(() => {
     const handleHashChange = () => {
       if (window.location.hash === '#signin' || window.location.hash === '#auth') {
         setIsAuthModalOpen(true);
       } else if (window.location.hash === '#admin') {
         setActiveView('admin');
+      } else if (window.location.hash === '#officer') {
+        setActiveView('officer');
       }
     };
     handleHashChange();
@@ -65,9 +68,11 @@ export default function App() {
     setAuthUser(userObj);
     showToast(`Signed in as ${userObj.displayName} (${userObj.role.toUpperCase()})`);
     
-    // If logged in as admin, transition straight to the Admin Dashboard
+    // Direct role-based routing
     if (userObj.role === 'admin') {
       setActiveView('admin');
+    } else if (userObj.role === 'officer') {
+      setActiveView('officer');
     } else if (activeView === 'auth-dedicated') {
       setActiveView('landing');
     }
@@ -108,6 +113,27 @@ export default function App() {
         )}
 
         <AdminDashboard
+          onReturnToLanding={() => setActiveView('landing')}
+          onLogout={handleLogout}
+        />
+      </div>
+    );
+  }
+
+  // If in Officer Panel view, render the Field Officer Panel
+  if (activeView === 'officer') {
+    return (
+      <div className="min-h-screen bg-[#F4F4F5] text-neutral-900 font-sans antialiased selection:bg-[#D2F843] selection:text-black">
+        {bannerToast && (
+          <div className="fixed top-6 right-6 z-50 max-w-md bg-neutral-900 text-white px-4 py-3 rounded-2xl shadow-2xl border border-neutral-700 flex items-center gap-3 animate-slide-up">
+            <div className="w-6 h-6 rounded-full bg-[#D2F843] text-black flex items-center justify-center font-bold text-xs shrink-0">
+              <CheckCircle2 className="w-4 h-4" />
+            </div>
+            <p className="text-xs font-medium text-neutral-200">{bannerToast.message}</p>
+          </div>
+        )}
+
+        <OfficerPanel
           onReturnToLanding={() => setActiveView('landing')}
           onLogout={handleLogout}
         />
@@ -197,15 +223,15 @@ export default function App() {
               <div className="max-w-5xl mx-auto px-4 text-center space-y-4">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-100 border border-neutral-200 text-xs font-bold text-neutral-800">
                   <Sparkles className="w-3.5 h-3.5 text-[#10B981]" />
-                  <span>Dual Experience Showcase</span>
+                  <span>Integrated MSCEB Operations Ecosystem</span>
                 </div>
                 
                 <h3 className="text-2xl sm:text-3xl font-extrabold text-neutral-900">
-                  Switch between Public Portal & Admin Console
+                  Explore Citizen, Admin & Field Officer Portals
                 </h3>
                 
                 <p className="text-xs sm:text-sm text-neutral-600 max-w-xl mx-auto">
-                  Experience both the citizen-facing grievance portal and the ServiceVolt-inspired MSCEB DISCOM Operations Dashboard.
+                  Experience seamless end-to-end telemetry across citizen reporting, central dispatch administration, and rapid on-site field engineering.
                 </p>
 
                 <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
@@ -214,14 +240,22 @@ export default function App() {
                     className="px-6 py-3 rounded-full bg-neutral-900 hover:bg-black text-white text-xs font-bold transition-all shadow-md flex items-center gap-2 active:scale-95 cursor-pointer"
                   >
                     <LayoutDashboard className="w-4 h-4 text-[#D2F843]" />
-                    <span>Open Admin Dashboard (ServiceVolt Blueprint)</span>
+                    <span>Admin Operations Dashboard</span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveView('officer')}
+                    className="px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-md flex items-center gap-2 active:scale-95 cursor-pointer"
+                  >
+                    <ShieldAlert className="w-4 h-4 text-[#D2F843]" />
+                    <span>MSCEB Field Officer Panel</span>
                   </button>
 
                   <button
                     onClick={() => handleOpenAuth('consumer', false)}
                     className="px-6 py-3 rounded-full bg-white hover:bg-neutral-50 border border-neutral-300 text-neutral-900 text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
                   >
-                    <span>Open 3-Role Sign In Card</span>
+                    <span>3-Role Sign In</span>
                   </button>
                 </div>
               </div>

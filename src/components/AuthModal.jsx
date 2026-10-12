@@ -48,7 +48,7 @@ export function AuthModal({
       setConsumerPassword('Consumer@2026');
       setOtpValue('482910');
     } else if (role === 'officer') {
-      setOfficerEmail('s.more@msedcl.gov.in');
+      setOfficerEmail('s.deshmukh@msedcl.gov.in');
       setOfficerPassword('OfficerPass@123');
       setSubstationCode(SUBSTATIONS_LIST[1]);
     } else {
@@ -80,11 +80,11 @@ export function AuthModal({
         userObj = {
           role: 'officer',
           id: officerEmail,
-          displayName: 'S. More (AE)',
-          badge: 'Assistant Engineer - Substation 04',
+          displayName: 'Sanjay Deshmukh (AE)',
+          badge: 'Assistant Engineer • Pune Circle',
           substation: substationCode
         };
-        setSuccessMsg(`Welcome, Officer More! Access granted to ${substationCode}`);
+        setSuccessMsg(`Welcome, Officer Deshmukh! Access granted to Officer Portal`);
       } else {
         userObj = {
           role: 'admin',
